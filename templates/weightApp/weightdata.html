@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>weightdata</title>
+    <link rel="stylesheet" href="{% static "css/mystyle.css" %}"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  </head>
+  <body>
+
+    <h1>Make your weight entries</h1>
+    <div class="">
+      <form method="POST">
+        {{ form }}
+        {% csrf_token %}
+        <input type="submit" class='btn btn-primary' value="submit">
+      </form>
+    </div>
+
+    <p></p>
+
+    <table style="width:100%" border="2px">
+      <tr>
+        <th>Date</th>
+        <th>weight</th>
+        <th>Modify</th>
+        <th>Delete</th>
+      </tr>
+      {% for weight in weight_records %}
+      <tr>
+        <td>{{ weight.entry_date|date:"m-d-Y" }}</td>
+        <td>{{ weight.weight_entry }}</td>
+        <td><button class="modify-btn" type="modify button" name="button" onclick="openForm({{ weight.id }},'{{ weight.entry_date|date:"m-d-Y" }}',{{ weight.weight_entry }})">Modify</button></td>
+        <td><button class="delete-btn" type="delete button" name="button" onclick="showConfirmDeleteModal({{weight.id}})">Delete</button></td>
+      </tr>
+      {% endfor %}
+    </table>
+
+    {% include "weightApp/edit-modal.html" %}
+    {% include "weightApp/confirm-delete-modal.html" %}
+
+    <script src="{% static "js/modify-modal.js" %}"></script>
+    <script src="{% static "js/confirm-delete-modal.js" %}"></script>
+
+  </body>
+</html>
